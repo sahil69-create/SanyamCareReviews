@@ -78,7 +78,22 @@
     .send-button { transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease; }
     .send-button:hover { transform: translateY(-2px); box-shadow: 0 15px 28px -15px rgba(26, 170, 89, .9); }
     .send-button:active { transform: translateY(0); }
-    .visual-frame { min-height: 100%; }
+    .visual-frame {
+      min-height: 100%;
+      align-content: center;
+      background: #edf6ff;
+    }
+    .visual-image {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: contain;
+      object-position: center;
+      background: #edf6ff;
+    }
+    .visual-caption {
+      background: linear-gradient(135deg, #0d2949, #174d80);
+    }
     @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
     .rise { animation: rise .7s cubic-bezier(.2,.8,.2,1) both; }
     .delay-1 { animation-delay: .08s; } .delay-2 { animation-delay: .16s; } .delay-3 { animation-delay: .24s; }
@@ -86,8 +101,8 @@
       body { background-image: radial-gradient(circle at 0 0, rgba(57, 145, 255, .13), transparent 18rem); }
       main { padding-left: 1rem; padding-right: 1rem; }
       .hero-lines { border-radius: 22px; }
-      .visual-frame { min-height: 0; aspect-ratio: 4 / 3; }
-      .visual-frame > img { object-position: center; }
+      .visual-frame { min-height: 0; display: block; }
+      .visual-image { aspect-ratio: 16 / 9; }
       .send-button { min-height: 54px; }
       .field { font-size: 16px !important; }
     }
@@ -157,9 +172,9 @@
         </form>
       </div>
 
-      <div class="visual-frame hero-lines relative flex min-h-[360px] items-end overflow-hidden border-t border-slate-100 lg:min-h-full lg:border-l lg:border-t-0">
-        <img src="message-thumbnail.jpeg" alt="Customer support team visual" class="absolute inset-0 h-full w-full object-cover object-center" loading="eager">
-        <div class="absolute inset-0 bg-gradient-to-t from-[#0d2949]/80 via-transparent to-white/10"></div>
+      <div class="visual-frame relative overflow-hidden border-t border-slate-100 lg:border-l lg:border-t-0">
+        <img src="message-thumbnail.jpeg" alt="Customer support team visual" class="visual-image" loading="eager">
+        <div class="visual-caption p-6 text-white sm:p-8"><p class="text-sm font-bold">Your voice matters</p><p class="mt-1 max-w-xs text-xs leading-5 text-white/75">A quick review helps our support team keep improving.</p></div>
       </div>
     </section>
 
