@@ -1,5 +1,7 @@
 # WhatsApp Review Request
 
+<img src="message-thumbnail.jpeg" alt="message thumbnail" srcset="">
+
 A lightweight, mobile-first customer feedback page for sending a personalized Google Review request through WhatsApp.
 
 ## Features
