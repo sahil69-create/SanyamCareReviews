@@ -10,7 +10,7 @@ A lightweight, mobile-first customer feedback page for sending a personalized Go
 - Indian mobile validation: exactly 10 digits, starting with 6, 7, 8, or 9
 - Automatic removal of non-numeric phone characters
 - Live personalized WhatsApp message preview
-- Opens a pre-filled `wa.me` chat in a new tab
+- Redirects directly to the entered customer's pre-filled WhatsApp chat
 - No backend, database, API, form submission, logging, or browser storage
 - Responsive desktop, tablet, and mobile layout
 - Accessible labels, focus states, validation messages, and reduced-motion support
@@ -35,7 +35,11 @@ Then open <http://localhost:8080>.
 2. Enter a valid 10-digit Indian WhatsApp number.
 3. Review the personalized message.
 4. Click **Send on WhatsApp**.
-5. The browser opens:
+5. The browser redirects directly to that customer's pre-filled WhatsApp chat.
+
+The direct `wa.me` URL supports text only. WhatsApp does not allow a webpage to attach an image automatically to a specific chat through that URL. The page therefore prioritizes direct number redirection and pre-filled text.
+
+The direct chat URL format is:
 
 ```text
 https://wa.me/91XXXXXXXXXX?text=ENCODED_MESSAGE
