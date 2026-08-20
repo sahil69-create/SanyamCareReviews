@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1261d6">
+  <meta name="description" content="Send a personalized Google Review request to a customer on WhatsApp.">
+  <title>WhatsApp Review Request | Customer Feedback System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#132238',
+            brand: '#1261d6',
+            whatsapp: '#1aaa59'
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'ui-sans-serif', 'system-ui', 'sans-serif']
+          },
+          boxShadow: {
+            panel: '0 26px 70px -34px rgba(24, 65, 112, .32)',
+            soft: '0 12px 34px -20px rgba(18, 97, 214, .32)'
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    html { overflow-x: hidden; }
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: #f5f9ff;
+      color: #132238;
+      background-image: radial-gradient(circle at 8% 8%, rgba(57, 145, 255, .16), transparent 25rem), radial-gradient(circle at 92% 85%, rgba(30, 190, 115, .1), transparent 24rem);
+    }
+    .grid-texture { background-image: linear-gradient(rgba(18, 97, 214, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(18, 97, 214, .035) 1px, transparent 1px); background-size: 34px 34px; }
+    .hero-lines { background: linear-gradient(135deg, rgba(255,255,255,.98), rgba(232,244,255,.94)); }
+    .field { transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease; }
+    .field, button { touch-action: manipulation; }
+    .field:focus { outline: none; border-color: #1261d6; box-shadow: 0 0 0 4px rgba(18, 97, 214, .12); background: #fff; }
+    .field.invalid { border-color: #e34c5a; box-shadow: 0 0 0 4px rgba(227, 76, 90, .1); }
+    #messagePreview { overflow-wrap: anywhere; }
+    .send-button { transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease; }
+    .send-button:hover { transform: translateY(-2px); box-shadow: 0 15px 28px -15px rgba(26, 170, 89, .9); }
+    .send-button:active { transform: translateY(0); }
+    .visual-frame { min-height: 100%; }
+    @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    .rise { animation: rise .7s cubic-bezier(.2,.8,.2,1) both; }
+    .delay-1 { animation-delay: .08s; } .delay-2 { animation-delay: .16s; } .delay-3 { animation-delay: .24s; }
+    @media (max-width: 639px) {
+      body { background-image: radial-gradient(circle at 0 0, rgba(57, 145, 255, .13), transparent 18rem); }
+      main { padding-left: 1rem; padding-right: 1rem; }
+      .hero-lines { border-radius: 22px; }
+      .visual-frame { min-height: 0; aspect-ratio: 4 / 3; }
+      .visual-frame > img { object-position: center; }
+      .send-button { min-height: 54px; }
+      .field { font-size: 16px !important; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body class="grid-texture">
+  <main class="mx-auto flex min-h-screen max-w-7xl flex-col px-5 py-6 sm:px-8 sm:py-10 lg:px-12">
+    <header class="rise flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand text-white shadow-soft" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20 11.5a8.1 8.1 0 0 1-8.2 8.1 8.4 8.4 0 0 1-3.7-.85L4 20l1.3-4a8 8 0 1 1 14.7-4.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.3 9.3c.2 2.2 2.3 4.4 4.5 4.7.6.1 1-.3 1.4-.7l.6-.7-1.7-1.1-.7.7c-.8-.3-1.4-.8-1.8-1.5l.5-.8-.9-1.7-1 .2c-.5.1-.9.4-.9.9Z" fill="currentColor"/></svg>
+        </div>
+        <div>
+          <p class="text-sm font-extrabold tracking-tight text-ink">SanyamCare</p>
+          <p class="text-[11px] font-semibold uppercase tracking-[.18em] text-slate-400">Customer support desk</p>
+        </div>
+      </div>
+      <div class="hidden items-center gap-2 rounded-full border border-blue-100 bg-white/75 px-3.5 py-2 text-xs font-bold text-brand shadow-sm sm:flex">
+        <span class="h-2 w-2 rounded-full bg-emerald-500"></span> Secure client-side tool
+      </div>
+    </header>
+
+    <section class="hero-lines rise delay-1 relative mt-8 overflow-hidden rounded-[28px] border border-white px-6 py-8 shadow-panel sm:px-10 sm:py-10 lg:mt-12 lg:px-14 lg:py-14">
+      <div class="pointer-events-none absolute -right-16 -top-24 h-64 w-64 rounded-full border-[34px] border-white/70"></div>
+      <div class="relative max-w-3xl">
+        <span class="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/80 px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-[.16em] text-brand"><span class="h-1.5 w-1.5 rounded-full bg-brand"></span> Customer Feedback System</span>
+        <h1 class="mt-5 max-w-2xl text-3xl font-extrabold leading-tight tracking-[-.035em] text-ink sm:text-5xl">WhatsApp Review Request</h1>
+        <p class="mt-4 max-w-xl text-sm leading-7 text-slate-600 sm:text-base">Send a personalized Google Review request directly to your customer on WhatsApp.</p>
+      </div>
+    </section>
+
+    <section class="rise delay-2 mt-5 grid overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-panel lg:grid-cols-[1.05fr_.95fr]">
+      <div class="p-6 sm:p-9 lg:p-11">
+        <div class="mb-8 flex items-start justify-between gap-5">
+          <div><p class="text-xs font-extrabold uppercase tracking-[.18em] text-brand">New request</p><h2 class="mt-2 text-xl font-extrabold tracking-tight text-ink">Customer details</h2></div>
+          <div class="rounded-2xl bg-blue-50 p-3 text-brand" aria-hidden="true"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M12 20.5a8.5 8.5 0 1 0-8.5-8.5c0 1.7.5 3.3 1.4 4.6L3.5 20.5l4-1.3A8.4 8.4 0 0 0 12 20.5Z" stroke="currentColor" stroke-width="1.8"/><path d="M8.7 9.2c.5 2.4 2.3 4.3 4.8 4.9l1.2-1.1-1.8-1.1-.8.7a4.6 4.6 0 0 1-1.9-1.9l.7-.8-1.1-1.8-1.1 1.1Z" fill="currentColor"/></svg></div>
+        </div>
+        <form id="reviewForm" novalidate>
+          <div class="space-y-5">
+            <div>
+              <label for="customerName" class="mb-2 block text-sm font-bold text-ink">Customer Name</label>
+              <input id="customerName" name="customerName" type="text" autocomplete="off" placeholder="Enter customer name" class="field w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm text-ink placeholder:text-slate-400" required>
+              <p id="nameError" class="mt-2 hidden text-xs font-semibold text-rose-600">Please enter the customer name.</p>
+            </div>
+            <div>
+              <label for="phoneNumber" class="mb-2 block text-sm font-bold text-ink">WhatsApp Number</label>
+              <div class="flex overflow-hidden rounded-xl border border-slate-200 bg-slate-50 focus-within:border-brand focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-100">
+                <span class="flex items-center border-r border-slate-200 px-4 text-sm font-extrabold text-slate-500">+91</span>
+                <input id="phoneNumber" name="phoneNumber" type="tel" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="10 digit mobile number" class="field min-w-0 flex-1 bg-transparent px-4 py-3.5 text-sm text-ink placeholder:text-slate-400" required>
+              </div>
+              <p id="phoneHint" class="mt-2 text-xs font-medium text-slate-400">Enter a number starting with 6, 7, 8, or 9.</p>
+              <p id="phoneError" class="mt-2 hidden text-xs font-semibold text-rose-600">Enter a valid 10-digit Indian mobile number.</p>
+            </div>
+          </div>
+
+          <div class="mt-7 rounded-2xl border border-blue-100 bg-[#f7fbff] p-4 sm:p-5">
+            <div class="flex items-center justify-between gap-3"><h3 class="text-sm font-extrabold text-ink">Message Preview</h3><span class="rounded-full bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">Live preview</span></div>
+            <p id="messagePreview" class="mt-4 whitespace-pre-line text-[13px] leading-6 text-slate-600"></p>
+          </div>
+
+          <button type="submit" class="send-button mt-7 flex w-full items-center justify-center gap-3 rounded-xl bg-whatsapp px-5 py-4 text-sm font-extrabold text-white shadow-[0_10px_25px_-14px_rgba(26,170,89,.9)] focus:outline-none focus:ring-4 focus:ring-emerald-100">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11.5a8.1 8.1 0 0 1-8.2 8.1 8.4 8.4 0 0 1-3.7-.85L4 20l1.3-4a8 8 0 1 1 14.7-4.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.3 9.3c.2 2.2 2.3 4.4 4.5 4.7.6.1 1-.3 1.4-.7l.6-.7-1.7-1.1-.7.7c-.8-.3-1.4-.8-1.8-1.5l.5-.8-.9-1.7-1 .2c-.5.1-.9.4-.9.9Z" fill="currentColor"/></svg>
+            Send on WhatsApp
+          </button>
+          <p class="mt-4 text-center text-[11px] font-medium text-slate-400">🔒 Customer number is not stored or submitted anywhere.</p>
+        </form>
+      </div>
+
+      <div class="visual-frame hero-lines relative flex min-h-[360px] items-end overflow-hidden border-t border-slate-100 lg:min-h-full lg:border-l lg:border-t-0">
+        <div class="absolute left-7 top-7 z-10 max-w-[220px]"><p class="text-xs font-extrabold uppercase tracking-[.18em] text-brand">A better conversation</p><p class="mt-2 text-2xl font-extrabold leading-tight tracking-tight text-ink">Every review helps us serve you better.</p></div>
+        <img src="message-thumbnail.jpeg" alt="Customer support team visual" class="absolute inset-0 h-full w-full object-cover object-center" loading="eager">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0d2949]/80 via-transparent to-white/10"></div>
+        <div class="relative z-10 p-7 text-white sm:p-9"><p class="text-sm font-bold">Your voice matters</p><p class="mt-1 max-w-xs text-xs leading-5 text-white/75">A quick review helps our support team keep improving.</p></div>
+      </div>
+    </section>
+
+    <footer class="rise delay-3 py-7 text-center text-[11px] font-bold tracking-wide text-slate-400">Customer Feedback &amp; Support System</footer>
+  </main>
+
+  <script>
+    const form = document.getElementById('reviewForm');
+    const nameInput = document.getElementById('customerName');
+    const phoneInput = document.getElementById('phoneNumber');
+    const preview = document.getElementById('messagePreview');
+    const nameError = document.getElementById('nameError');
+    const phoneError = document.getElementById('phoneError');
+    const phoneHint = document.getElementById('phoneHint');
+
+    const messageFor = (name) => `Hi ${name}, it was great speaking with you! 😊 We’re glad to know you’ve had a good experience with us. Please share your valuable feedback by leaving us a Google Review:\n\n*Leave a Google Review:* [https://g.page/r/CXStsTiM9P4mEBM/review](https://g.page/r/CXStsTiM9P4mEBM/review)\n\nThank you for your support! 🙏`;
+
+    function updatePreview() {
+      preview.textContent = messageFor(nameInput.value.trim() || '');
+    }
+
+    function setInvalid(input, error, invalid) {
+      input.classList.toggle('invalid', invalid);
+      error.classList.toggle('hidden', !invalid);
+      input.setAttribute('aria-invalid', String(invalid));
+    }
+
+    nameInput.addEventListener('input', () => {
+      updatePreview();
+      if (nameInput.value.trim()) setInvalid(nameInput, nameError, false);
+    });
+
+    phoneInput.addEventListener('input', () => {
+      phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 10);
+      const isValid = /^[6-9]\d{9}$/.test(phoneInput.value);
+      if (phoneInput.value.length > 0) {
+        phoneHint.classList.toggle('hidden', isValid);
+        setInvalid(phoneInput, phoneError, !isValid);
+      } else {
+        phoneHint.classList.remove('hidden');
+        setInvalid(phoneInput, phoneError, false);
+      }
+    });
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const name = nameInput.value.trim();
+      const phone = phoneInput.value;
+      const validName = name.length > 0;
+      const validPhone = /^[6-9]\d{9}$/.test(phone);
+      setInvalid(nameInput, nameError, !validName);
+      setInvalid(phoneInput, phoneError, !validPhone);
+      if (!validName || !validPhone) {
+        (validName ? phoneInput : nameInput).focus();
+        return;
+      }
+      const whatsappUrl = `https://wa.me/91${phone}?text=${encodeURIComponent(messageFor(name))}`;
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    });
+
+    updatePreview();
+  </script>
+</body>
+</html>
